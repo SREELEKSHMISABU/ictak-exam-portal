@@ -1,73 +1,59 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function LoginPage() {
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student'); // default selection
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password,
-        role, // include role in request if needed
-      });
-      localStorage.setItem('token', res.data.token);
+  const handleLogin = async e => {
+    e.preventDefault();
+    setError('');
+    if(!email || !password) {
+      setError('Email and Password are required');
+      return;
+    }
 
-      if (res.data.role === 'student') navigate('/student-dashboard');
-      else if (res.data.role === 'admin') navigate('/admin-dashboard');
-    } catch (err) {
-      alert(err.response?.data?.msg || 'Login failed');
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
+
+      if(res.data.user.role === 'student') navigate('/student-dashboard');
+      else if(res.data.user.role === 'admin') navigate('/admin-dashboard');
+      else setError('Unknown user role');
+    } catch(err) {
+      setError(err.response?.data?.message || 'Login failed');
     }
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '400px', margin: 'auto' }}>
+    <div style={{ maxWidth: 400, margin: 'auto', padding: '2rem' }}>
       <h2>Login</h2>
-
-      <div style={{ marginBottom: '1rem' }}>
-        <label>
-          <input
-            type="radio"
-            value="student"
-            checked={role === 'student'}
-            onChange={() => setRole('student')}
-          /> Student
-        </label>{' '}
-        <label>
-          <input
-            type="radio"
-            value="admin"
-            checked={role === 'admin'}
-            onChange={() => setRole('admin')}
-          /> Admin
-        </label>
-      </div>
-
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={e => setEmail(e.target.value)}
-        style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={e => setPassword(e.target.value)}
-        style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
-      />
-      <button onClick={handleLogin} style={{ marginBottom: '1rem' }}>
-        Login
-      </button>
-
-      <p style={{ fontSize: '0.9rem', color: 'gray' }}>
-        * Students can login with the Paatshala credentials.
-      </p>
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+          autoFocus
+          style={{ width: '100%', padding: 8, marginBottom: 12 }}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          style={{ width: '100%', padding: 8, marginBottom: 12 }}
+        />
+        {error && <div style={{color:'red', marginBottom:12}}>{error}</div>}
+        <button type="submit" style={{padding:'10px 20px', width:'100%'}}>Login</button>
+      </form>
+      <p style={{fontSize:'small', marginTop:12}}>Students login with their Paatshala credentials.</p>
     </div>
   );
 }
-
-export default LoginPage;
