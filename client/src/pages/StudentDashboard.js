@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
+import { Box, Button, Typography } from '@mui/material';
 
 export default function StudentDashboard() {
   const [formData, setFormData] = useState({ name:'', phone:'', email:'', dob:'', batchName:'', gender:'' });
   const [submitted, setSubmitted] = useState(false);
   const [msg, setMsg] = useState('');
   const batches = ['KKEM March CSA', 'KKEM March DSA', 'KKEM March MLAI', 'KKEM March FSD', 'KKEM March ST'];
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const token = localStorage.getItem('token');
 
@@ -45,16 +48,21 @@ export default function StudentDashboard() {
 
   if(submitted) {
     return (
-      <div style={{ maxWidth: 600, margin: 'auto', padding: 20 }}>
-        <h2>Thank you for submitting</h2>
-        <p>Your exit test confirmation is received and the form is disabled.</p>
-      </div>
+      <Box maxWidth={600} mx="auto" p={2}>
+        <Typography variant="h4" gutterBottom>Thank you for submitting</Typography>
+        <Typography>Your exit test confirmation is received and the form is disabled.</Typography>
+        <Navbar userRole="student" />
+      </Box>
     );
   }
 
   return (
-    <div style={{ maxWidth: 600, margin: 'auto', padding: 20 }}>
-      <h2>Exit Test Confirmation</h2>
+    <Box maxWidth={600} mx="auto" p={2}>
+      <Navbar userRole="student" />
+      <Typography variant="h4" gutterBottom>Exit Test Confirmation</Typography>
+      <Typography variant="subtitle1" sx={{ mb: 3 }}>
+        Welcome, {user?.email}
+      </Typography>
       <form onSubmit={handleSubmit}>
         <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} required style={inputStyle} />
         <input name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required style={inputStyle} />
@@ -70,12 +78,13 @@ export default function StudentDashboard() {
           <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
-        <button type="submit" style={{ padding: '10px 20px', marginTop: 10 }}>Submit</button>
-        {msg && <p style={{ marginTop: 10, color: 'green' }}>{msg}</p>}
+        <Button variant="contained" type="submit" sx={{ mt: 2 }}>Submit</Button>
+        {msg && <Typography sx={{ mt: 2, color: 'green' }}>{msg}</Typography>}
       </form>
-    </div>
+    </Box>
   );
 }
+
 const inputStyle = {
   width: '100%',
   padding: 8,

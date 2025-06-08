@@ -17,6 +17,7 @@ async function seed() {
     await User.create([
       { email: 'admin@gmail.com', password: adminPass, role: 'admin', eligible: true },
       { email: 'student1@gmail.com', password: studentPass, role: 'student', eligible: true },
+      { email: 'student3@gmail.com', password: studentPass, role: 'student', eligible: true },
       { email: 'student2@gmail.com', password: studentPass, role: 'student', eligible: false }
     ]);
     console.log('Seed completed');

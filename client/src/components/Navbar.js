@@ -1,17 +1,29 @@
 import React from 'react';
-import './Navbar.css';
-import { Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-function Navbar() {
+const Navbar = ({ userRole = 'user' }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/');
+  };
+
   return (
-    <nav className="navbar">
-      <div className="nav-logo">ICTAK Portal</div>
-      <div className="nav-links">
-        <Link to="/">Home</Link>
-        <Link to="/login">Login</Link>
-      </div>
-    </nav>
+    <AppBar position="static" sx={{ backgroundColor: '#1565c0' }}>
+      <Toolbar>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          ICTAK Exam Portal - {userRole.toUpperCase()}
+        </Typography>
+        <Box>
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
-}
+};
 
 export default Navbar;
