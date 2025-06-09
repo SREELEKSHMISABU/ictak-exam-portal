@@ -13,11 +13,12 @@ async function seed() {
     await User.deleteMany({});
     const adminPass = await bcrypt.hash('Admin123!', 10);
     const studentPass = await bcrypt.hash('Student123!', 10);
+    const studentPass2 = await bcrypt.hash('Student@123', 10);
 
     await User.create([
       { email: 'admin@gmail.com', password: adminPass, role: 'admin', eligible: true },
       { email: 'student1@gmail.com', password: studentPass, role: 'student', eligible: true },
-      { email: 'student3@gmail.com', password: studentPass, role: 'student', eligible: true },
+      { email: 'student3@gmail.com', password: studentPass2, role: 'student', eligible: true },
       { email: 'student2@gmail.com', password: studentPass, role: 'student', eligible: false }
     ]);
     console.log('Seed completed');

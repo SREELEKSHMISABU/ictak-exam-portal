@@ -6,7 +6,10 @@ export default function HomePage() {
     <div style={{
       minHeight: '100vh',
       display: 'flex', flexDirection:'column', justifyContent:'center', alignItems:'center',
-      background: '#f0f4f8', padding: 40,
+      backgroundImage: "url('/assets/images/background.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+       padding: 40,
     }}>
       <h1>ICTAK Exam Registration Portal</h1>
       <p>Welcome ICTAK students and test admins</p>

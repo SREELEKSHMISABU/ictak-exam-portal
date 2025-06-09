@@ -10,7 +10,8 @@ function Footer() {
         color: 'white',
         textAlign: 'center',
         py: 2,
-        mt: 4
+        mt: 4,
+        flexGrow: 1
       }}
     >
       <Typography variant="body2">

@@ -10,7 +10,7 @@ const Navbar = () => {
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
 
-  const showControls = token && (location.pathname.includes('dashboard'));
+  const showControls = token && location.pathname.includes('dashboard');
 
   const handleLogout = () => {
     localStorage.clear();
@@ -19,23 +19,40 @@ const Navbar = () => {
 
   return (
     <AppBar position="static" sx={{ backgroundColor: '#1565c0' }}>
-      <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          {showControls && user?.role
-            ? `ICTAK Exam Portal - ${user.role.toUpperCase()}`
-            : 'ICTAK Exam Portal'}
-        </Typography>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        
+        {/* Left side: Logo + Title */}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <img 
+            src="/assets/images/LOGO_ICTAK.png" 
+            alt="Logo" 
+            style={{ height: 40, marginRight: 12, cursor: 'pointer' }} 
+            onClick={() => navigate('/')}
+          />
+          <Typography variant="h6" sx={{ml: 10,cursor: 'default' }}>
+            {showControls && user?.role
+              ? `ICTAK Exam Portal - ${user.role.toUpperCase()}`
+              : 'ICTAK Exam Portal'}
+          </Typography>
+        </Box>
 
-        {showControls && (
-          <Box>
-            <Button color="inherit" onClick={() => navigate(`/${user.role}-dashboard`)}>
-              Dashboard
-            </Button>
-            <Button color="inherit" onClick={handleLogout}>
-              Logout
-            </Button>
-          </Box>
-        )}
+        {/* Right side: Buttons */}
+        <Box>
+          <Button color="inherit" onClick={() => navigate('/')}>
+            Home
+          </Button>
+
+          {showControls && (
+            <>
+              <Button color="inherit" onClick={() => navigate(`/${user.role}-dashboard`)}>
+                Dashboard
+              </Button>
+              <Button color="inherit" onClick={handleLogout}>
+                Logout
+              </Button>
+            </>
+          )}
+        </Box>
       </Toolbar>
     </AppBar>
   );

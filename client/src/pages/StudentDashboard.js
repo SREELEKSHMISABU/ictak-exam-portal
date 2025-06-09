@@ -45,40 +45,90 @@ export default function StudentDashboard() {
       });
   };
 
-  if(submitted) {
-    return (
-      <Box maxWidth={600} mx="auto" p={2}>
-        <Typography variant="h4" gutterBottom>Thank you for submitting</Typography>
-        <Typography>Your exit test confirmation is received and the form is disabled.</Typography>
-
-      </Box>
-    );
-  }
-
   return (
     <Box maxWidth={600} mx="auto" p={2}>
-
       <Typography variant="h4" gutterBottom>Exit Test Confirmation</Typography>
       <Typography variant="subtitle1" sx={{ mb: 3 }}>
         Welcome, {user?.email}
       </Typography>
+  
+      {submitted && (
+        <Typography sx={{ mb: 2, color: 'green' }}>
+          ✅ Thank you for submitting. The form is now disabled.
+        </Typography>
+      )}
+  
       <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} required style={inputStyle} />
-        <input name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required style={inputStyle} />
-        <input name="email" placeholder="Email" value={formData.email} disabled style={inputStyle} />
-        <input type="date" name="dob" value={formData.dob} onChange={handleChange} required style={inputStyle} />
-        <select name="batchName" value={formData.batchName} onChange={handleChange} required style={inputStyle}>
+        <input
+          name="name"
+          placeholder="Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          disabled={submitted}
+          style={inputStyle}
+        />
+        <input
+          name="phone"
+          placeholder="Phone Number"
+          value={formData.phone}
+          onChange={handleChange}
+          required
+          disabled={submitted}
+          style={inputStyle}
+        />
+        <input
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          disabled
+          style={inputStyle}
+        />
+        <input
+          type="date"
+          name="dob"
+          value={formData.dob}
+          onChange={handleChange}
+          required
+          disabled={submitted}
+          style={inputStyle}
+        />
+        <select
+          name="batchName"
+          value={formData.batchName}
+          onChange={handleChange}
+          required
+          disabled={submitted}
+          style={inputStyle}
+        >
           <option value="">Select Batch</option>
-          {batches.map(b => <option key={b} value={b}>{b}</option>)}
+          {batches.map(b => (
+            <option key={b} value={b}>{b}</option>
+          ))}
         </select>
-        <select name="gender" value={formData.gender} onChange={handleChange} required style={inputStyle}>
+        <select
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+          required
+          disabled={submitted}
+          style={inputStyle}
+        >
           <option value="">Select Gender</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
-        <Button variant="contained" type="submit" sx={{ mt: 2 }}>Submit</Button>
-        {msg && <Typography sx={{ mt: 2, color: 'green' }}>{msg}</Typography>}
+  
+        {!submitted && (
+          <Button variant="contained" type="submit" sx={{ mt: 2 }}>
+            Submit
+          </Button>
+        )}
+  
+        {msg && (
+          <Typography sx={{ mt: 2, color: 'green' }}>{msg}</Typography>
+        )}
       </form>
     </Box>
   );

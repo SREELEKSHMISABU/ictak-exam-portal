@@ -1,33 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import {
   Box, Typography, Button, TextField, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Paper,  Alert
+  TableContainer, TableHead, TableRow, Paper, Alert, Stack
 } from '@mui/material';
 
 export default function AdminDashboard() {
-  const [batches, setBatches] = useState([]);
+  const allBatches = [
+    'KKEM March CSA',
+    'KKEM March DSA',
+    'KKEM March MLAI',
+    'KKEM March FSD',
+    'KKEM March ST'
+  ];
+
   const [selectedBatch, setSelectedBatch] = useState('');
   const [students, setStudents] = useState([]);
   const [resultFile, setResultFile] = useState(null);
   const [googleSheetLink, setGoogleSheetLink] = useState('');
   const [emailData, setEmailData] = useState({ toEmail: '', subject: '', message: '', resultLink: '' });
   const [msg, setMsg] = useState('');
+  const [activeForm, setActiveForm] = useState(null); // 'upload' | 'email' | null
   const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/admin/batches', { headers: { Authorization: `Bearer ${token}` } })
-      .then(res => setBatches(res.data.batches))
-      .catch(console.error);
-  }, [token]);
 
   const loadStudents = (batch) => {
     setSelectedBatch(batch);
     setMsg('');
+    setActiveForm(null);
     axios.get(`http://localhost:5000/api/admin/batch/${encodeURIComponent(batch)}/students`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setStudents(res.data.students))
-      .catch(console.error);
+      .catch(() => setStudents([])); // Empty list if error
   };
 
   const handleUpload = () => {
@@ -60,55 +63,60 @@ export default function AdminDashboard() {
   };
 
   return (
-    <>
-      <Box maxWidth="lg" mx="auto" p={3}>
-        <Typography variant="h4" gutterBottom>Test Admin Dashboard</Typography>
+    <Box maxWidth="lg" mx="auto" p={3}>
+      <Typography variant="h4" gutterBottom>Test Admin Dashboard</Typography>
 
-        <Box mb={3}>
-          <Typography variant="h6">Batches</Typography>
-          {batches.length === 0 ? <Typography>No batches available</Typography> : (
-            <Box display="flex" flexWrap="wrap" gap={1}>
-              {batches.map(b => (
-                <Button key={b} variant="outlined" onClick={() => loadStudents(b)}>{b}</Button>
-              ))}
-            </Box>
-          )}
-        </Box>
+      <Box mb={3}>
+        <Typography variant="h6" gutterBottom>Batches</Typography>
+        <Stack spacing={1}>
+          {allBatches.map(b => (
+            <Button key={b} variant="outlined" fullWidth onClick={() => loadStudents(b)}>
+              {b}
+            </Button>
+          ))}
+        </Stack>
+      </Box>
 
-        {selectedBatch && (
-          <>
-            <Typography variant="h6" gutterBottom>Students in {selectedBatch}</Typography>
-            {students.length === 0 ? (
-              <Typography>No registered students in this batch</Typography>
-            ) : (
-              <TableContainer component={Paper} sx={{ mb: 4 }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Email</TableCell>
-                      <TableCell>Phone</TableCell>
-                      <TableCell>DOB</TableCell>
-                      <TableCell>Gender</TableCell>
-                      <TableCell>Submitted Form</TableCell>
+      {selectedBatch && (
+        <>
+          <Typography variant="h6" gutterBottom>Students in {selectedBatch}</Typography>
+          {students.length === 0 ? (
+            <Typography>No registered students in this batch</Typography>
+          ) : (
+            <TableContainer component={Paper} sx={{ mb: 4 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Phone</TableCell>
+                    <TableCell>DOB</TableCell>
+                    <TableCell>Gender</TableCell>
+                    <TableCell>Submitted Form</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {students.map(s => (
+                    <TableRow key={s._id}>
+                      <TableCell>{s.name}</TableCell>
+                      <TableCell>{s.email}</TableCell>
+                      <TableCell>{s.phone}</TableCell>
+                      <TableCell>{new Date(s.dob).toLocaleDateString()}</TableCell>
+                      <TableCell>{s.gender}</TableCell>
+                      <TableCell>{s.hasSubmittedExitForm ? 'Yes' : 'No'}</TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {students.map(s => (
-                      <TableRow key={s._id}>
-                        <TableCell>{s.name}</TableCell>
-                        <TableCell>{s.email}</TableCell>
-                        <TableCell>{s.phone}</TableCell>
-                        <TableCell>{new Date(s.dob).toLocaleDateString()}</TableCell>
-                        <TableCell>{s.gender}</TableCell>
-                        <TableCell>{s.hasSubmittedExitForm ? 'Yes' : 'No'}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
 
+          <Stack direction="row" spacing={2} mb={2}>
+            <Button variant="contained" onClick={() => setActiveForm('upload')}>Upload Result</Button>
+            <Button variant="contained" color="secondary" onClick={() => setActiveForm('email')}>Send Email</Button>
+          </Stack>
+
+          {activeForm === 'upload' && (
             <Box mb={3}>
               <Typography variant="h6">Upload Test Result (PDF) or Google Sheet Link</Typography>
               <input type="file" accept="application/pdf" onChange={e => setResultFile(e.target.files[0])} />
@@ -119,9 +127,11 @@ export default function AdminDashboard() {
                 value={googleSheetLink}
                 onChange={e => setGoogleSheetLink(e.target.value)}
               />
-              <Button variant="contained" color="primary" onClick={handleUpload}>Upload Result</Button>
+              <Button variant="contained" onClick={handleUpload}>Upload Result</Button>
             </Box>
+          )}
 
+          {activeForm === 'email' && (
             <Box>
               <Typography variant="h6">Send Email with Test Result</Typography>
               <TextField
@@ -160,11 +170,11 @@ export default function AdminDashboard() {
               />
               <Button variant="contained" color="secondary" onClick={handleSendEmail}>Send Email</Button>
             </Box>
+          )}
 
-            {msg && <Alert sx={{ mt: 3 }} severity="info">{msg}</Alert>}
-          </>
-        )}
-      </Box>
-    </>
+          {msg && <Alert sx={{ mt: 3 }} severity="info">{msg}</Alert>}
+        </>
+      )}
+    </Box>
   );
 }

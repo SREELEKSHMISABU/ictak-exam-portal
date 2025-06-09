@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Alert } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,45 +34,56 @@ export default function LoginPage() {
   return (
     <Box
       sx={{
-        maxWidth: 400,
-        margin: 'auto',
-        padding: 4,
-        backgroundColor: '#f9f9f9',
-        boxShadow: 3,
-        borderRadius: 2,
-        mt: 6
+        minHeight: '100vh',
+        backgroundImage: 'url("/assets/images/addimg.png")', // <-- Background image
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
-      <Typography variant="h5" align="center" gutterBottom>
-        Login
-      </Typography>
-      <form onSubmit={handleLogin}>
-        <TextField
-          type="email"
-          label="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          fullWidth
-          required
-          margin="normal"
-        />
-        <TextField
-          type="password"
-          label="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          fullWidth
-          required
-          margin="normal"
-        />
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        <Button type="submit" variant="contained" color="primary" fullWidth>
+      <Box
+        sx={{
+          maxWidth: 400,
+          width: '90%',
+          padding: 4,
+          backgroundColor: 'rgba(255, 255, 255, 0.9)', // translucent white
+          boxShadow: 3,
+          borderRadius: 2,
+        }}
+      >
+        <Typography variant="h5" align="center" gutterBottom>
           Login
-        </Button>
-      </form>
-      <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-        Students login with their Paatshala credentials.
-      </Typography>
+        </Typography>
+        <form onSubmit={handleLogin}>
+          <TextField
+            type="email"
+            label="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <TextField
+            type="password"
+            label="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            fullWidth
+            required
+            margin="normal"
+          />
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Login
+          </Button>
+        </form>
+        <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+          Students login with their Paatshala credentials.
+        </Typography>
+      </Box>
     </Box>
   );
 }
