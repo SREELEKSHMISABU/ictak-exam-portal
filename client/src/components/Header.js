@@ -1,12 +1,14 @@
 import React from 'react';
-import '../index.css';
+import { AppBar, Toolbar } from '@mui/material';
 import Navbar from '../components/Navbar';
 
 function Header() {
   return (
-    <header className="header">
-      <Navbar />
-    </header>
+    <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
+      <Toolbar disableGutters>
+        <Navbar />
+      </Toolbar>
+    </AppBar>
   );
 }
 
