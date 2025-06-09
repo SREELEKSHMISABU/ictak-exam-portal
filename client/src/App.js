@@ -20,26 +20,46 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={
-          <Layout>
-            <HomePage />
-          </Layout>
-        } />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/student-dashboard" element={
-          <PrivateRoute role="student">
-            <Layout>
-              <StudentDashboard />
+        {/* Home and Login pages — no dashboard/logout controls */}
+        <Route
+          path="/"
+          element={
+            <Layout showControls={false}>
+              <HomePage />
             </Layout>
-          </PrivateRoute>
-        } />
-        <Route path="/admin-dashboard" element={
-          <PrivateRoute role="admin">
-            <Layout>
-              <AdminDashboard />
-            </Layout>
-          </PrivateRoute>
-        } />
+          }
+        />
+        <Route path="/login" element={
+  <Layout>
+    <LoginPage />
+  </Layout>
+} />
+
+
+        {/* Student Dashboard — show dashboard/logout */}
+        <Route
+          path="/student-dashboard"
+          element={
+            <PrivateRoute role="student">
+              <Layout showControls={true} userRole="student">
+                <StudentDashboard />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+
+        {/* Admin Dashboard — show dashboard/logout */}
+        <Route
+          path="/admin-dashboard"
+          element={
+            <PrivateRoute role="admin">
+              <Layout showControls={true} userRole="admin">
+                <AdminDashboard />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

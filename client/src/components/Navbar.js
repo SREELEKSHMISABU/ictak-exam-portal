@@ -1,44 +1,41 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Box, IconButton, Tooltip } from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
-import HomeIcon from '@mui/icons-material/Home';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import { useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-const Navbar = ({ userRole = 'user' }) => {
+const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const token = localStorage.getItem('token');
+  const userStr = localStorage.getItem('user');
+  const user = userStr ? JSON.parse(userStr) : null;
+
+  const showControls = token && (location.pathname.includes('dashboard'));
 
   const handleLogout = () => {
     localStorage.clear();
     navigate('/');
   };
 
-  const goToDashboard = () => {
-    if (userRole === 'admin') navigate('/admin-dashboard');
-    else if (userRole === 'student') navigate('/student-dashboard');
-  };
-
   return (
     <AppBar position="static" sx={{ backgroundColor: '#1565c0' }}>
       <Toolbar>
-        <IconButton edge="start" color="inherit" onClick={goToDashboard}>
-          <HomeIcon />
-        </IconButton>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          ICTAK Exam Portal – {userRole.toUpperCase()}
+          {showControls && user?.role
+            ? `ICTAK Exam Portal - ${user.role.toUpperCase()}`
+            : 'ICTAK Exam Portal'}
         </Typography>
-        <Box>
-          <Tooltip title="Dashboard">
-            <IconButton color="inherit" onClick={goToDashboard}>
-              <DashboardIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Logout">
-            <IconButton color="inherit" onClick={handleLogout}>
-              <LogoutIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
+
+        {showControls && (
+          <Box>
+            <Button color="inherit" onClick={() => navigate(`/${user.role}-dashboard`)}>
+              Dashboard
+            </Button>
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );

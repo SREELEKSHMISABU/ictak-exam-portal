@@ -3,10 +3,10 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, showControls = false, userRole = 'user' }) => {
   return (
     <>
-      <Header />
+      <Header showControls={showControls} userRole={userRole} />
       <main>{children}</main>
       <Footer />
     </>

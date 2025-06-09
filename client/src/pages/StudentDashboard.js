@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
 import { Box, Button, Typography } from '@mui/material';
 
 export default function StudentDashboard() {
@@ -51,14 +50,14 @@ export default function StudentDashboard() {
       <Box maxWidth={600} mx="auto" p={2}>
         <Typography variant="h4" gutterBottom>Thank you for submitting</Typography>
         <Typography>Your exit test confirmation is received and the form is disabled.</Typography>
-        <Navbar userRole="student" />
+
       </Box>
     );
   }
 
   return (
     <Box maxWidth={600} mx="auto" p={2}>
-      <Navbar userRole="student" />
+
       <Typography variant="h4" gutterBottom>Exit Test Confirmation</Typography>
       <Typography variant="subtitle1" sx={{ mb: 3 }}>
         Welcome, {user?.email}

@@ -4,7 +4,6 @@ import {
   Box, Typography, Button, TextField, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, Paper,  Alert
 } from '@mui/material';
-import Navbar from '../components/Navbar';
 
 export default function AdminDashboard() {
   const [batches, setBatches] = useState([]);
@@ -62,7 +61,6 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <Navbar userRole="admin" />
       <Box maxWidth="lg" mx="auto" p={3}>
         <Typography variant="h4" gutterBottom>Test Admin Dashboard</Typography>
 
