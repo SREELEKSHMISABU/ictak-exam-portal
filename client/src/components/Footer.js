@@ -6,12 +6,12 @@ function Footer() {
     <Box
       component="footer"
       sx={{
-        backgroundColor: '#1976d2', // MUI primary color
+        backgroundColor: '#1976d2', 
         color: 'white',
         textAlign: 'center',
         py: 2,
         mt: 4,
-        flexGrow: 1
+        flexGrow: 0
       }}
     >
       <Typography variant="body2">

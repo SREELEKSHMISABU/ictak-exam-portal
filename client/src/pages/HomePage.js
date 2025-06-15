@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function HomePage() {
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: '40em',
       display: 'flex', flexDirection:'column', justifyContent:'center', alignItems:'center',
       backgroundImage: "url('/assets/images/background.jpg')",
         backgroundSize: 'cover',

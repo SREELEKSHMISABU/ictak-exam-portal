@@ -34,8 +34,8 @@ export default function LoginPage() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        backgroundImage: 'url("/assets/images/addimg.png")', // <-- Background image
+        minHeight: '40em',
+        backgroundImage: 'url("/assets/images/addimg.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
