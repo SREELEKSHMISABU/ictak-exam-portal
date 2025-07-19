@@ -28,4 +28,6 @@ A MERN stack web application for managing ICTAK exam registrations, student conf
 
 ## 👩‍💻 Author
 **Sreelekshmi Sabu**  
-Full Stack Developer | [LinkedIn Profile](#) | [Portfolio](#)
+Full Stack Developer | [LinkedIn Profile](www.linkedin.com/in/
+sreelekshmi-sabu-011b86200
+) 
