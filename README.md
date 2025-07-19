@@ -14,11 +14,8 @@ A MERN stack web application for managing ICTAK exam registrations, student conf
 - **Database:** MongoDB  
 - **Other Tools:** JWT Authentication, Nodemailer  
 
-## 📷 Screenshots
-(Add 1-2 screenshots of your dashboards here later)
-
 ## 🔗 Live Demo
-(If deployed, add the demo link here – I can help you deploy on Vercel)
+(https://ictak-exam-portal.vercel.app/)
 
 ## 🧑‍💻 How to Run
 1. Clone this repository  
